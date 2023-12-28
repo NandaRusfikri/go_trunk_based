@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  backend-api:
+    container_name: backend-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    init: true
+    ports:
+      - "54321:54321"
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=postgres
+    networks:
+      - net-nanda
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=db
+      - POSTGRES_USER=nanda
+      - POSTGRES_PASSWORD=nanda
+    ports:
+      - "5432:5432"
+    networks:
+      - net-nanda
+networks:
+  net-nanda:
+    driver: bridge
